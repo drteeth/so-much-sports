@@ -8,13 +8,4 @@ FactoryGirl.define do
     "label #{n}"
   end
 
-  factory :sport do
-    name
-  end
-
-  factory :period do
-    label
-    is_default false
-  end
-
 end

@@ -17,5 +17,4 @@ describe Sport do
     @sport.periods.count.should eq 2
   end
 
-
 end
