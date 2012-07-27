@@ -8,4 +8,8 @@ FactoryGirl.define do
     "label #{n}"
   end
 
+  sequence :rank do |n|
+    n
+  end
+
 end

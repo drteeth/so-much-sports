@@ -16,4 +16,9 @@ describe Period do
     @period.id.should eq 123
   end
 
+  it "should have an 'is_default' attribute" do
+    @period.is_default = true
+    @period.is_default.should eq true
+  end
+
 end
