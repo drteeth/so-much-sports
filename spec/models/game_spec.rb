@@ -67,6 +67,12 @@ describe Game do
     @game.visitor_team_id.should eq 4
   end
 
+  it "should have a home team" do
+    @game.home_team.should be_a Team
+  end
 
+  it "should have a visitor team" do
+    @game.visitor_team.should be_a Team
+  end
 
 end
