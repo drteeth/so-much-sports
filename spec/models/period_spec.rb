@@ -4,6 +4,7 @@ describe Period do
 
   before(:each) do
     @period = FactoryGirl.create(:period)
+    @period.games << FactoryGirl.create_list(:game,3)
   end
 
   it "should have a label" do
@@ -22,8 +23,12 @@ describe Period do
   end
 
   it "should have games" do
-    @period.games << FactoryGirl.create(:game)
-    @period.games.count.should eq 1
+    @period.games.count.should eq 3
+  end
+
+  it "should destroy associated games when it is destroyed" do
+    @period.destroy
+    Game.count.should eq 0
   end
 
 end
