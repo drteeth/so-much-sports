@@ -11,7 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120727232852) do
+ActiveRecord::Schema.define(:version => 20120730000120) do
+
+  create_table "games", :force => true do |t|
+    t.string   "type"
+    t.string   "league"
+    t.string   "status"
+    t.string   "display_status"
+    t.string   "url"
+    t.integer  "home_score"
+    t.integer  "visitor_score"
+    t.string   "channel"
+    t.string   "reason"
+    t.datetime "game_time"
+    t.integer  "home_team_id"
+    t.integer  "visitor_team_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "period_id"
+  end
 
   create_table "periods", :force => true do |t|
     t.boolean  "is_default"

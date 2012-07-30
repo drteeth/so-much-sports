@@ -21,4 +21,9 @@ describe Period do
     @period.is_default.should eq true
   end
 
+  it "should have games" do
+    @period.games << FactoryGirl.create(:game)
+    @period.games.count.should eq 1
+  end
+
 end
