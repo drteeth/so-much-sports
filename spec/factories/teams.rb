@@ -1,11 +1,11 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :team do
-    name "MyString"
-    shortname "MyString"
-    nickname "MyString"
-    division "MyString"
-    league "MyString"
+  factory :team, aliases: [:home_team, :visitor_team] do
+    name "TeamName"
+    shortname "SHR"
+    nickname "Nickname"
+    division "DIV"
+    league "LEAG"
   end
 end
