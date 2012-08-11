@@ -10,9 +10,13 @@ describe Importer do
 
   describe "sport order" do
 
-    # it "should sync the sport order" do
-    #   @importer.sync_sports
-    # end
+    it "should use the API" do
+      @importer.parser = @mock_parser
+      @importer.api = double("api")
+      @importer.api.should_receive(:order).and_return('')
+      @importer.parser.should_receive(:order).with('').and_return([])
+      @importer.sync_sports
+    end
 
     it "should delete old sports" do
       @sports = FactoryGirl.create_list(:sport, 3)

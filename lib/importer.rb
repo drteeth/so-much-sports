@@ -2,7 +2,7 @@ require 'parser'
 require 'api'
 
 class Importer
-  attr_accessor :parser
+  attr_accessor :parser, :api
 
   def initialize
     @parser = Parser.new
