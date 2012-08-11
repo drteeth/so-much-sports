@@ -5,6 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+FactoryGirl.create(:sport_with_periods, name:'MLB')
+FactoryGirl.create(:sport_with_periods, name:'NHL')
+FactoryGirl.create(:sport_with_periods, name:'NFL')
 
 quotes = [
   ["Football is an incredible game. Sometimes it's so incredible, it's unbelievable.", "Tom Landry"],
