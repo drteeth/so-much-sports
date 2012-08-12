@@ -38,7 +38,22 @@ quotes = [
   ["This is a really a lovely horse, I once rode her mother.", "Ted Walsh"],
   ["Skiing combines outdoor fun with knocking down trees with your face.", "Dave Barry"],
   ["It's just a job. Grass grows, birds fly, waves pound the sand. I beat people up.", "Muhammad Ali"],
-  ["Whenever I feel like exercising I lie down until the feeling passes!", "Robert M. Hutchins"]
+  ["Whenever I feel like exercising I lie down until the feeling passes!", "Robert M. Hutchins"],
+  ["We can't win at home. We can't win on the road. As general manager, I just can't figure out where else to play.", "Pat Williams"],
+  ["I want your heart. I want to eat your children.", "Mike Tyson"],
+  ["I don't think there's anybody in this organization not focused on the 49ers...I mean Chargers.", "Bill Belichick"],
+  ["If the NBA were on channel 5 and a bunch of frogs making love was on channel 4, I'd watch the frogs even if they were coming in fuzzy.", "Bobby Knight"],
+  ["He's a guy who gets up at six o'clock in the morning regardless of what time it is.", "Lou Duva"],
+  ["When you get that nice celebration coming into the dugout and you're getting your ass hammered by guys - there's no better feeling than to have that done.", "Matt Stairs"],
+  ["Every time that I have ever tried to help a woman out, I have been incarcerated.", "Jose Canseco"],
+  ["Don't say I don't get along with my teammates. I just don't get along with some of the guys on the team.", "Terrell Owens"],
+  ["The offensive linemen are the biggest guys on the field, they're bigger than everybody else, and that's what makes them the biggest guys on the field.", "John Madden"],
+  ["I don't want to shoot my mouth in my foot, but those are games we can win.", "Sherman Douglas"],
+  ["Basketball is the second most exciting indoor sport, and the other one shouldn't have spectators.", "Dick Vertleib"],
+  ["Left hand, right hand, it doesn't matter. I'm amphibious.", "Charles Shackleford"],
+  ["I owe a lot to my parents, especially my mother and father", "Greg Norman"],
+  ["The NFL, like life, is full of idiots.", "Randy Cross"],
+  ["The future ain't what it use to be.", "Yogi Berra"]
 ]
 
 quotes.each { |q| Quote.create(:content => q[0], :author => q[1] || "Unknown" ) }
