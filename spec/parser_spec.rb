@@ -5,6 +5,8 @@ describe Parser do
 
   before(:each) do
     @parser = Parser.new
+    @parsed = @parser.games(ApiFactory.games_json)
+    @game = @parsed[0]
   end
 
   it "should parse the order" do
@@ -22,11 +24,7 @@ describe Parser do
     parsed[1]["period"][2]["label"].should eq "Fri."
   end
 
-  describe "games" do
-    before(:each) do
-      @parsed = @parser.games(ApiFactory.games_json)
-      @game = @parsed[0]
-    end
+  describe "Games" do
 
     it "should have two games" do
       @parsed.length.should eq 2
@@ -79,23 +77,24 @@ describe Parser do
     it "should have a url" do
       @game["href"].should eq "http://scores.nbcsports.msnbc.com/mlb/boxscore.asp?gamecode=320729113"
     end
+  end
 
-    describe "Teams" do
+  describe "Teams" do
 
+    describe "Visiting" do
       before(:each) do
-        @home = @game["home-team"]
         @visiting = @game["visiting-team"]
       end
 
-      it "should have a visitor_score" do
+      it "should have a score" do
         @visiting["score"].should eq "0"
       end
 
-      it "should have a visitor_team_id" do
+      it "should have a team id" do
         @visiting["id"].should eq "4"
       end
 
-      it "should have a alias" do
+      it "should have an alias" do
         @visiting["alias"].should eq "CWS"
       end
 
@@ -110,16 +109,22 @@ describe Parser do
       it "should have a league" do
         @visiting["league"].should eq "AL"
       end
+    end
 
-      it "should have a home_score" do
+    describe "Home" do
+      before(:each) do
+        @home = @game["home-team"]
+      end
+
+      it "should have a score" do
         @home["score"].should eq "0"
       end
 
-      it "should have a home_team_id" do
+      it "should have a team id" do
         @home["id"].should eq "13"
       end
 
-      it "should have a alias" do
+      it "should have an alias" do
         @home["alias"].should eq "Tex"
       end
 
