@@ -19,6 +19,13 @@ class Importer
       sport = Sport.find_or_create_by_name(name)
       sport.update_column(:rank, index + 1)
     end
-
   end
+
+  def sync_periods
+    sports = Sport.all.map{|s| s.name}.join("|")
+    period_data = @parser.periods(@api.periods(sports))
+
+    
+  end
+
 end

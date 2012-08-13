@@ -3,7 +3,7 @@ class Api
   def order
   end
 
-  def periods(sport)
+  def periods(sports)
   end
 
   def games(sport,period)

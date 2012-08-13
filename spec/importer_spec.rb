@@ -45,8 +45,31 @@ describe Importer do
       @importer.sync_sports
 
       Sport.all.map { |s| s.name }.should eq order
-
     end
+
+    it "should ignore non-team sports" do
+      # golf, nascar, cycling, etc
+    end
+
+  end
+
+  describe "periods" do
+
+    it "should add new periods" do
+      # start with some sports
+      sports = [
+        FactoryGirl.create(:sport, name:'MLB'),
+        FactoryGirl.create(:sport, name:'MLS'),
+      ]
+
+      api = double("api")
+      api.stub(:periods).and_return(ApiFactory.periods_json)
+      @importer.api = api
+      @importer.sync_periods()
+
+      Periods.count.should eq 6
+    end
+
   end
 
 end
