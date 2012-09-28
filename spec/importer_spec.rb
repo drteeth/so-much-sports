@@ -67,7 +67,7 @@ describe Importer do
       @importer.api = api
       @importer.sync_periods()
 
-      Periods.count.should eq 6
+      Period.count.should eq 6
     end
 
   end
