@@ -85,27 +85,63 @@ describe Importer do
       Period.first.period_id.should eq period.period_id
     end
 
-    it "should add new periods" do
-      # start with some sports
-      sports = [
-        FactoryGirl.create(:sport, name:'MLB'),
-        FactoryGirl.create(:sport, name:'MLS'),
-      ]
+    describe "adding periods" do
 
-      api = double("api")
-      api.stub(:periods).and_return(ApiFactory.periods_json)
-      @importer.api = api
+      before(:each) do
+        # start with some sports
+        sports = [
+          @mlb = FactoryGirl.create(:sport, name:'MLB'),
+          @mls = FactoryGirl.create(:sport, name:'MLS'),
+        ]
 
-      # do the sync
-      @importer.sync_periods
+        api = double("api")
+        api.stub(:periods).and_return(ApiFactory.periods_json)
+        @importer.api = api
 
-      # we should have 6 new periods
-      Period.count.should eq 6
+        # do the sync
+        @importer.sync_periods
+      end
+
+      it "should add new periods" do
+        # we should have 6 new periods
+        Period.count.should eq 6
+      end
+
+      it "should reference the sports" do
+        Period.all.map(&:sport_id).should eq [@mlb.id,@mlb.id,@mlb.id,@mls.id,@mls.id,@mls.id]
+      end
+
     end
 
-    it "should add periods for multiple sports across multiple calls"
+    it "should add periods for multiple sports across multiple calls" do
       # create the first sport
-      FactoryGirl.create(:sport, name:'mlb')
+      mlb = FactoryGirl.create(:sport, name:'mlb')
+
+      # respond with a period for this sport
+      @importer.parser = @mock_parser
+      @mock_parser.stub(:periods).and_return([{
+        "sport" => mlb.name,
+        "period" => [{"period" => '123'}]
+      }])
+
+      # sync once
+      @importer.sync_periods
+      Period.first.period_id.should eq '123'
+      Period.count.should eq 1
+
+      # add another sport
+
+      mls = FactoryGirl.create(:sport, name:'mls')
+      @mock_parser.stub(:periods).and_return([{
+        "sport" => mls.name,
+        "period" => [{"period" => '456'}]
+      }])
+
+      # sync again
+      @importer.sync_periods
+      Period.last.period_id.should eq '456'
+      Period.count.should eq 2
+    end
 
   end
 

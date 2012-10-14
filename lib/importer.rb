@@ -32,9 +32,9 @@ class Importer
 
     puts period_data
 
-    period_data.each do |sport|
-      sport_id = Sport.find_by_name(sport['sport'])
-      periods = sport['period']
+    period_data.each do |sport_hash|
+      sport = Sport.find_by_name!(sport_hash['sport'])
+      periods = sport_hash['period']
 
       # get all the active period ids
       period_ids = periods.map do |period|
@@ -42,14 +42,14 @@ class Importer
       end
 
       # remove old periods
-      periods_to_remove = Period.for_sport(sport_id) - period_ids
+      periods_to_remove = sport.periods - period_ids
       periods_to_remove.each do |id|
         Period.find(id).destroy
       end
 
       # update or create the periods
       periods.each do |p|
-        period = Period.find_or_create_by_sport_id_and_period_id(sport_id, p['period'])
+        period = Period.find_or_create_by_sport_id_and_period_id(sport.id, p['period'])
         period.update_attributes({
           :is_default => p['isdefault'],
           :label => p['label'],
@@ -60,7 +60,7 @@ class Importer
 
   def sync_games
     Period.all.each do |period|
-      games_data = @parser.games(@api.games(period.sport, period.period_id))
+      games_data = @parser.games(@api.games(period.sport.name, period.period_id))
 
       game_ids_from_server = games_data.map do |game|
         game['gamecode']
