@@ -30,8 +30,6 @@ class Importer
     json = @api.periods Sport.names.join("|")
     period_data = @parser.periods(json)
 
-    puts period_data
-
     period_data.each do |sport_hash|
       sport = Sport.find_by_name!(sport_hash['sport'])
       periods = sport_hash['period']
@@ -112,6 +110,7 @@ class Importer
           :visitor_score => g['visiting-team']['score'],
           :home_team_id => g["home-team"]["id"],
           :visitor_team_id => g["visiting-team"]["id"],
+          :period_id => period.id
         }
         game = Game.find_by_id(game_id)
         if game.present?

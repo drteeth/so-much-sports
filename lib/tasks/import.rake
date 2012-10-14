@@ -2,6 +2,11 @@ require 'importer'
 
 namespace :nbc do
 
+  desc "sync everything"
+  task :sync => [:sports, :periods, :games] do
+    puts "sync complete."
+  end
+
   desc "import sport order"
   task :sports => :environment do
     puts "fetching order..."
@@ -28,6 +33,8 @@ namespace :nbc do
     puts "clearing data"
     # TODO move this to the importer and test it.
     Sport.destroy_all
+    Period.destroy_all
+    Game.destroy_all
     Team.destroy_all
   end
 

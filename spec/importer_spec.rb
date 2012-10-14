@@ -150,7 +150,7 @@ describe Importer do
     before(:each) do
       # start with a sport, a period and some games
       sport = FactoryGirl.create(:sport, name:'MLB')
-      @period = FactoryGirl.create(:period, sport:sport, period_id:'20120729')
+      @period = FactoryGirl.create(:period, sport:sport, period_id:20120729)
 
       # setup our mock api
       api = double("api")
@@ -199,6 +199,11 @@ describe Importer do
 
       # Brown Sox should now be White Sox
       Team.find(4).nickname.should eq "White Sox"
+    end
+
+    it "should reference a period" do
+      @importer.sync_games
+      Game.scoped.map(&:period_id).should eq 2.times.map {@period.id}
     end
 
   end

@@ -1,7 +1,3 @@
-FactoryGirl.create(:sport_with_periods, name:'MLB')
-FactoryGirl.create(:sport_with_periods, name:'NHL')
-FactoryGirl.create(:sport_with_periods, name:'NFL')
-
 quotes = [
   ["Football is an incredible game. Sometimes it's so incredible, it's unbelievable.", "Tom Landry"],
   ["And Farmer has now scored 19 goals, exactly double the number he scored last season.", "Garry Lyon"],
