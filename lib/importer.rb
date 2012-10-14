@@ -10,22 +10,118 @@ class Importer
   end
 
   def sync_sports
-    parser_order = @parser.order(@api.order)
-    db_order = Sport.all.map { |s| s.name }
-    remove = db_order - parser_order
-    remove.each { |name| Sport.find_by_name(name).destroy }
+    # get the sports from the server
+    server_sport_order = @parser.order(@api.order)
 
-    parser_order.each_with_index do |name, index|
+    # delete any sports that we have locally that the server not longer mentions
+    sports_to_remove = Sport.names - server_sport_order
+    sports_to_remove.each { |name| Sport.find_by_name(name).destroy }
+
+    # update or create each sport in the server's list
+    # re-ordering as needed.
+    server_sport_order.each_with_index do |name, index|
       sport = Sport.find_or_create_by_name(name)
       sport.update_column(:rank, index + 1)
     end
   end
 
   def sync_periods
-    sports = Sport.all.map{|s| s.name}.join("|")
-    period_data = @parser.periods(@api.periods(sports))
+    # get period data for all the sports we have locally
+    json = @api.periods Sport.names.join("|")
+    period_data = @parser.periods(json)
 
-    
+    period_data.each do |sport|
+      sport_id = Sport.find_by_name(sport['sport'])
+      periods = sport['period']
+
+      # get all the active period ids
+      period_ids = periods.map do |period|
+        period['period'] # the id comes to us in the 'period' attr
+      end
+
+      # remove old periods
+      periods_to_remove = Period.for_sport(sport_id) - period_ids
+      periods_to_remove.each do |id|
+        Period.find(id).destroy
+      end
+
+      # update or create the periods
+      periods.each do |p|
+        period = Period.find_or_create_by_sport_id_and_period_id(sport_id, p['period'])
+        period.update_attributes({
+          :is_default => p['isdefault'],
+          :label => p['label'],
+        })
+      end
+    end
+  end
+
+  def sync_games
+    Period.all.each do |period|
+      games_data = @parser.games(@api.games(period.sport, period.period_id))
+
+      game_ids_from_server = games_data.map do |game|
+        game['gamecode']
+      end
+
+      # remove old games
+      games_to_remove = period.games.map(&:id) - game_ids_from_server
+      puts "del: #{games_to_remove}, server: #{game_ids_from_server}, inc: #{period.games.map(&:id)}"
+      games_to_remove.each do |game_id|
+        Game.find(game_id).destroy
+      end
+
+      # create/update any teams
+      teams = games_data.map do |g|
+        [g["visiting-team"], g["home-team"]]
+      end.flatten
+
+      teams.each do |t|
+        id = t['id']
+        team = Team.find_or_create_by_id!(id)
+        team.update_attributes!({
+          :name => t['display_name'],
+          :shortname => t['alias'],
+          :nickname => t['nickname'],
+          :division => t['division'],
+          :league => t['league'],
+        })
+      end
+
+      # add/update games
+      games_data.each do |g|
+        game_id = g['gamecode']
+        attrs = {
+          :id => game_id,
+          :type => g['gametype'], #TODO rename to game_type
+          :league => g['league'],
+          :status => g['status'],
+          :url => g['href'],
+          :channel => g['tv'],
+          :reason => g['reason'],
+          # TODO deal with game type
+          # :is => g['is-dst'],
+          # :game_time => g['gametime'],
+          # :gamedate => g['gamedate'],
+          :display_status => "#{g['display_status1']} #{g['display_status2']}",
+          # TODO change score default to 0
+          :home_score => g['home-team']['score'],
+          # TODO change score default to 0
+          # TODO start collecting running scores?
+          :visitor_score => g['visiting-team']['score'],
+          :home_team_id => g["home-team"]["id"],
+          :visitor_team_id => g["visiting-team"]["id"],
+        }
+        game = Game.find_by_id(game_id)
+        if game.present?
+          game.update_attributes! attrs
+        else
+          game = Game.create! attrs
+        end
+        puts "Added #{game.inspect}"
+      end
+    end
+
   end
 
 end
