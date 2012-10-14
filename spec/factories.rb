@@ -12,4 +12,8 @@ FactoryGirl.define do
     n
   end
 
+  sequence :period_id do |n|
+    n.to_s
+  end
+
 end
