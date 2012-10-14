@@ -30,6 +30,8 @@ class Importer
     json = @api.periods Sport.names.join("|")
     period_data = @parser.periods(json)
 
+    puts period_data
+
     period_data.each do |sport|
       sport_id = Sport.find_by_name(sport['sport'])
       periods = sport['period']
@@ -120,6 +122,18 @@ class Importer
       end
     end
 
+  end
+
+  def self.sync_sports
+    Importer.new.sync_sports
+  end
+
+  def self.sync_periods
+    Importer.new.sync_periods
+  end
+
+  def self.sync_games
+    Importer.new.sync_games
   end
 
 end

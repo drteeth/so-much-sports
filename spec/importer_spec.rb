@@ -103,6 +103,10 @@ describe Importer do
       Period.count.should eq 6
     end
 
+    it "should add periods for multiple sports across multiple calls"
+      # create the first sport
+      FactoryGirl.create(:sport, name:'mlb')
+
   end
 
   describe "games" do
