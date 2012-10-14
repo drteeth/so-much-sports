@@ -6,7 +6,8 @@ class ApiFactory
 
   def self.periods_json
     <<-DELIM
-    [ {"sport": "MLB","period": [{"period": "20120728", "label": "Sat.", "isdefault": false},{"period": "20120729", "label": "Sun.", "isdefault": true},{"period": "20120730", "label": "Mon.", "isdefault": false}]} ,{"sport": "MLS","period": [{"period": "20120728", "label": "Sat.", "isdefault": false},{"period": "20120729", "label": "Sun.", "isdefault": true},{"period": "20120803", "label": "Fri.", "isdefault": false}]} ]
+    [ {"sport": "MLB","period": [{"period": "20120728", "label": "Sat.", "isdefault": false},{"period": "20120729", "label": "Sun.", "isdefault": true},{"period": "20120730", "label": "Mon.", "isdefault": false}]} ,
+      {"sport": "MLS","period": [{"period": "20120728", "label": "Sat.", "isdefault": false},{"period": "20120729", "label": "Sun.", "isdefault": true},{"period": "20120803", "label": "Fri.", "isdefault": false}]} ]
 DELIM
   end
 
