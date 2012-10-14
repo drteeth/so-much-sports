@@ -107,20 +107,24 @@ describe Importer do
 
   describe "games" do
 
-    it "should delete old games" do
+    before(:each) do
       # start with a sport, a period and some games
       sport = FactoryGirl.create(:sport, name:'MLB')
-      period = FactoryGirl.create(:period, sport:sport, period_id:'20120729')
-      games = FactoryGirl.create_list(:game, 3, period:period)
-
-      # add 2 more games that shouldn't be deleted
-      games = [FactoryGirl.create(:game, id:320729110),
-               FactoryGirl.create(:game, id:320729113)]
+      @period = FactoryGirl.create(:period, sport:sport, period_id:'20120729')
 
       # setup our mock api
       api = double("api")
       api.stub(:games).and_return(ApiFactory.games_json)
       @importer.api = api
+    end
+
+    it "should delete old games" do
+      # start with some old games
+      games = FactoryGirl.create_list(:game, 3, period:@period)
+
+      # add 2 more games that shouldn't be deleted
+      games = [FactoryGirl.create(:game, id:320729110),
+               FactoryGirl.create(:game, id:320729113)]
 
       # do the sync
       @importer.sync_games
@@ -132,20 +136,29 @@ describe Importer do
     end
 
     it "should add new games" do
-      # start with a sport, a period
-      sport = FactoryGirl.create(:sport, name:'MLB')
-      period = FactoryGirl.create(:period, sport:sport, period_id:'20120729')
-
-      # setup our mock api
-      api = double("api")
-      api.stub(:games).and_return(ApiFactory.games_json)
-      @importer.api = api
-
       # do the sync
       @importer.sync_games
 
       # we should have 2 games at this point
       Game.count.should eq 2
+    end
+
+    it "should create teams" do
+      # do the sync
+      @importer.sync_games
+
+      # there are 2 games, totalling 4 teams in the factory data
+      Team.count.should eq 4
+    end
+
+    it "should update teams" do
+      # start with a team that will be updated
+      FactoryGirl.create(:team, id:4, nickname:"Brown Sox")
+
+      @importer.sync_games
+
+      # Brown Sox should now be White Sox
+      Team.find(4).nickname.should eq "White Sox"
     end
 
   end
