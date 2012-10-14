@@ -4,4 +4,8 @@ class GamesController < ApplicationController
   def index
     @sports = Sport.scoped
   end
+
+  def show
+    @sport = Sport.find_by_name(params[:id].upcase)
+  end
 end
