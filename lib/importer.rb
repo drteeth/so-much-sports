@@ -66,7 +66,6 @@ class Importer
 
       # remove old games
       games_to_remove = period.games.map(&:id) - game_ids_from_server
-      puts "del: #{games_to_remove}, server: #{game_ids_from_server}, inc: #{period.games.map(&:id)}"
       games_to_remove.each do |game_id|
         Game.find(game_id).destroy
       end
@@ -93,7 +92,7 @@ class Importer
         game_id = g['gamecode']
         attrs = {
           :id => game_id,
-          :type => g['gametype'], #TODO rename to game_type
+          :game_type => g['gametype'],
           :league => g['league'],
           :status => g['status'],
           :url => g['href'],
@@ -118,7 +117,6 @@ class Importer
         else
           game = Game.create! attrs
         end
-        puts "Added #{game.inspect}"
       end
     end
 

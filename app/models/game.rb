@@ -7,7 +7,7 @@ class Game < ActiveRecord::Base
                   :league,
                   :reason,
                   :status,
-                  :type,
+                  :game_type,
                   :url,
                   :visitor_score,
                   :visitor_team_id,

@@ -7,8 +7,8 @@ describe Game do
   end
 
   it "should have a type" do
-    @game.type = "type"
-    @game.type.should eq "type"
+    @game.game_type = "type"
+    @game.game_type.should eq "type"
   end
 
   it "should have a league" do
