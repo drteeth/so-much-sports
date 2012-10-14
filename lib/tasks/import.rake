@@ -23,4 +23,12 @@ namespace :nbc do
     puts Game.all.map(&:id)
   end
 
+  desc "clear"
+  task :clear => :environment do
+    puts "clearing data"
+    # TODO move this to the importer and test it.
+    Sport.destroy_all
+    Team.destroy_all
+  end
+
 end
