@@ -1,9 +1,12 @@
 class PeriodsController < ApplicationController
+  respond_to :json
+
   def index
-    @periods = Period.scoped
+    @periods = Sport.named(params[:sport_id]).periods
   end
 
   def show
-    @period = Period.find_by_sport_id_and_period_id(params[:sport_id], params[:id])
+    @period = Period.sport_and_period(params[:sport_id], params[:id])
   end
+
 end

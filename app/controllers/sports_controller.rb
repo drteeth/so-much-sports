@@ -1,9 +1,11 @@
 class SportsController < ApplicationController
+  respond_to :json
+
   def index
-    @sports = Sport.scoped
+    @sports = Sport.includes(Sport.dependents)
   end
 
   def show
-    @sport = Sport.find(params[:id])
+    @sport = Sport.named(params[:id])
   end
 end

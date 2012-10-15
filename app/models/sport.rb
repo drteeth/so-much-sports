@@ -7,4 +7,12 @@ class Sport < ActiveRecord::Base
     all.map(&:name)
   end
 
+  def self.named(name)
+    find_by_name(name, :include => dependents)
+  end
+
+  def self.dependents
+    [ :periods => Period.dependents ]
+  end
+
 end
