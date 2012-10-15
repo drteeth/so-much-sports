@@ -171,8 +171,7 @@ describe Importer do
 
       # we should have only 2 games at this point
       Game.count.should eq 2
-      Game.first.should eq games.first
-      Game.last.should eq games.last
+      Game.scoped.map(&:id).sort.should eq [320729110, 320729113].sort
     end
 
     it "should add new games" do
