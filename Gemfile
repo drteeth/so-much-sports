@@ -28,6 +28,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'bullet'
   gem 'debugger'
 end
 
