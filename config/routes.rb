@@ -1,4 +1,13 @@
 SoMuchSports::Application.routes.draw do
-  # get "games/index"
   resources :games, :only => [:index, :show]
+
+  resources :sports do
+    resources :periods do
+      resources :games do
+      end
+    end
+  end
+
+  resources :teams, :only => [:index, :show]
+
 end
