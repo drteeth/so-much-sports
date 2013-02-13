@@ -13,7 +13,8 @@ class Parser
 
   def games(games_json)
     json = JSON.parse(games_json)
-    result = json["games"].map do |g|
+    games = json["games"] || []
+    result = games.map do |g|
       xml = Nokogiri::XML(g)
       game = {}
       game["visiting-team"] = {}

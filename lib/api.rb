@@ -15,7 +15,12 @@ class Api
 
   def games(sport,period)
     url = "http://scores.nbcsports.msnbc.com/ticker/data/gamesMSNBC.js.asp?sport=#{sport}&period=#{period}"
-    open(url).read
+    begin
+      open(url).read
+    rescue
+      puts "*** failed to open #{url} ***"
+      '{}'
+    end
   end
 
 end

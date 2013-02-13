@@ -8,7 +8,7 @@ class Sport < ActiveRecord::Base
   end
 
   def self.named(name)
-    find_by_name(name, :include => dependents)
+    where(name: name)#.:include => dependents)
   end
 
   def self.dependents

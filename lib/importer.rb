@@ -58,7 +58,8 @@ class Importer
 
   def sync_games
     Period.all.each do |period|
-      games_data = @parser.games(@api.games(period.sport.name, period.period_id))
+      json = @api.games(period.sport.name, period.period_id)
+      games_data = @parser.games(json)
 
       game_ids_from_server = games_data.map do |game|
         game['gamecode']
