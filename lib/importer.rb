@@ -11,7 +11,9 @@ class Importer
 
   def sync_sports
     # get the sports from the server
-    server_sport_order = @parser.order(@api.order)
+    server_sport_order = @parser.order(@api.order) - blacklist
+
+    puts "order: #{server_sport_order}"
 
     # delete any sports that we have locally that the server not longer mentions
     sports_to_remove = Sport.names - server_sport_order
@@ -31,7 +33,8 @@ class Importer
     period_data = @parser.periods(json)
 
     period_data.each do |sport_hash|
-      sport = Sport.find_by_name!(sport_hash['sport'])
+      sport_name = sport_hash['sport'].downcase
+      sport = Sport.find_by_name!(sport_name)
       periods = sport_hash['period']
 
       # get all the active period ids
@@ -122,6 +125,10 @@ class Importer
       end
     end
 
+  end
+
+  def blacklist
+    %w(golf nascar)
   end
 
   def self.sync_sports
