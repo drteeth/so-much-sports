@@ -17,6 +17,7 @@ class SportsController < ApplicationController
       periods: Period.all,
       games: Game.all,
       teams: Team.all,
+      quotes: Quote.all,
     }
     respond_with everything
   end
@@ -28,6 +29,7 @@ class SportsController < ApplicationController
       periods: Period.where(['updated_at > ?', since]),
       games: Game.where(['updated_at > ?', since]),
       teams: Team.where(['updated_at > ?', since]),
+      quotes: Quote.where(['updated_at > ?', since]),
     }
     respond_with everything
   end
