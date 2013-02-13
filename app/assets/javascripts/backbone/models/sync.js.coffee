@@ -7,8 +7,6 @@ class App.Sync extends Backbone.Model
     @on 'change', @update, this
 
   update: (sync) ->
-    # sportCollection = new App.SportCollection(sports)
-    console.log 'update', sync.changedAttributes()
     map =
       sports: App.SportCollection
       periods: App.PeriodCollection
@@ -16,7 +14,13 @@ class App.Sync extends Backbone.Model
       teams: App.TeamCollection
       quotes: App.QuoteCollection
     _.each sync.changedAttributes(), (items, key) ->
+      # create the collection
       collection = new map[key]()
+
+      # clear the items in localStorage
+      collection.update([]) # doesn't seem to work.
+
+      # add the new items
       _.each items, (item) ->
         collection.create(item)
     @trigger('loading:complete')

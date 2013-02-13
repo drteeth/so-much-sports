@@ -6,6 +6,5 @@ class App.SportView extends Backbone.View
 
   render: ->
     context = _.extend @model.toJSON(), periods: @periods.toJSON()
-    console.log context
     @$el.html @template context
     this

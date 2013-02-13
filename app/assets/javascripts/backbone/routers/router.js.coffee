@@ -1,13 +1,34 @@
+class App.State extends Backbone.Model
+
 class App.Router extends Backbone.Router
 
   routes:
-    '' : 'index'
+    '' : 'listSports'
     'sports' : 'listSports'
     'sports/:id' : 'showSport'
     'games/:period' : 'listGames'
 
-  routeChanged: (route) ->
-    console.log 'routeChanged:', route
+  initialize: ->
+    @state = new App.State()
+    @listenTo @state, 'change:sport', @sportChanged
+    @listenTo @state, 'change:period', @periodChanged
+
+  sportChanged: ->
+    @listSports()
+    sportId = @state.get('sport')
+    sport = @sports().get(sportId)
+    @sports().highlight(sport)
+    @periodList = new App.SportView
+      model: sport
+      periods: @periods().forSport(sport)
+      el: $('#period-list')
+    @periodList.render()
+    @_view?.remove()
+
+  periodChanged: ->
+    periodId = @state.get('period')
+    period = @periods().get(periodId)
+    @state.set('sport',period.get('sport_id'))
 
   sports: ->
     unless @_sports?
@@ -47,23 +68,19 @@ class App.Router extends Backbone.Router
     $('#views').append view.render().el
 
   listSports: ->
-    console.log @sports()
-    @sportList = new App.SportIndexView
+    @sportList ||= new App.SportIndexView
       collection: @sports()
       el: $('#sport-list')
     @sportList.render()
 
   showSport: (id) ->
-    sport = @sports().get(id)
-    @periodList = new App.SportView
-      model: sport
-      periods: @periods().forSport(sport)
-      el: $('#period-list')
-    @periodList.render()
+    @state.set('sport', id)
 
   listGames: (periodId) ->
+    pid = parseInt(periodId,10)
+    @state.set('period', pid)
     teams = @teams()
-    games = @games().forPeriod(parseInt(periodId,10))
+    games = @games().forPeriod(pid)
     games.each (game) ->
       game.set
         home_team: teams.get(game.get('home_team_id'))

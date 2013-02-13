@@ -12,9 +12,16 @@ class App.GameIndexView extends Backbone.View
 
   addGame: (game) ->
     view = new ItemView(model: game)
+    view.listenTo this, 'clear', view.remove
     @$el.append view.render().el
 
   render: ->
-    @$el.empty()
+    @clear()
     @collection.each @addGame, this
     this
+
+  remove: ->
+    @clear()
+
+  clear: ->
+    @trigger('clear')
