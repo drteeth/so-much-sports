@@ -1,9 +1,7 @@
 class Parser
 
-  def order(order_jsonp)
-    pattern = /callback\((.*)\);/
-    match = pattern.match(order_jsonp)
-    json = JSON.parse(match[1])
+  def order(response)
+    json = JSON.parse(response)
     json["sports"].split("|")
   end
 
